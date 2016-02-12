@@ -39,7 +39,7 @@ void set_params(lj_params * len_jo, misc_params * m_pars,
    m_pars->kb = 0.00001380660; // Bolztmann's Constant (aJ/molecule/K)
    m_pars->xmass = MW * 100.0 / 6.0220; // mass of single particle
    m_pars->xmassi = 1.0 / m_pars->xmass; // inverse of mass of single particle
-
+   m_pars->flops = 0;
    len_jo->eps *= m_pars->kb; // convert well depth to appropriate units
 
 }

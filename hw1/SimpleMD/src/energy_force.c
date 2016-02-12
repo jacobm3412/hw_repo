@@ -12,7 +12,7 @@
 //       - energy_long: long-range correction to energy.
 //       - force_long: long-range correction to force.
 //************************************************************************
-void compute_long_range_correction(const lj_params * len_jo, const misc_params * m_pars,
+void compute_long_range_correction(const lj_params * len_jo, misc_params * m_pars,
                                    float * energy_long, float * force_long )
 {
 
@@ -46,16 +46,15 @@ void compute_energy_and_force( Atoms * myatoms, const lj_params * len_jo,
       myatoms->fx[atomi] = 0.0;
       myatoms->fy[atomi] = 0.0;
       myatoms->fz[atomi] = 0.0;
+   m_pars->flops = m_pars->flops +1;   
    }
    myatoms->pot_energy = 0.0;
    myatoms->virial = 0.0;
    
    for (atomi=0; atomi < myatoms->N; atomi++)
-   {
-
+   { m_pars->flops = m_pars->flops +1; 
       for (atomj=atomi+1 ; atomj < myatoms->N; atomj++)
       {
-
          float xxi = myatoms->xx[atomi] - myatoms->xx[atomj];
          xxi = minimum_image( xxi, m_pars->side, m_pars->sideh );
          float yyi = myatoms->yy[atomi] - myatoms->yy[atomj];
@@ -64,6 +63,7 @@ void compute_energy_and_force( Atoms * myatoms, const lj_params * len_jo,
          zzi = minimum_image( zzi, m_pars->side, m_pars->sideh );
 
          float dis2 = xxi*xxi + yyi*yyi + zzi*zzi;
+m_pars->flops = m_pars->flops +1;
          if ( dis2 <= len_jo->rcut2 )
          {
             float dis2i = 1.0 / dis2;
@@ -81,14 +81,14 @@ void compute_energy_and_force( Atoms * myatoms, const lj_params * len_jo,
             myatoms->fx[atomj] -= fterm * xxi;
             myatoms->fy[atomj] -= fterm * yyi;
             myatoms->fz[atomj] -= fterm * zzi;
-         
+         m_pars->flops = m_pars->flops +19;
          }
 
       } 
 
    }
    for (atomi=0; atomi < myatoms->N; atomi++)
-   {
+   {m_pars->flops = m_pars->flops +7;
       myatoms->fx[atomi] *= 24.0 * len_jo->eps;
       myatoms->fy[atomi] *= 24.0 * len_jo->eps;
       myatoms->fz[atomi] *= 24.0 * len_jo->eps;
@@ -96,7 +96,7 @@ void compute_energy_and_force( Atoms * myatoms, const lj_params * len_jo,
    myatoms->pot_energy *= 4.0 * len_jo->eps;
    myatoms->virial *= 24.0 * len_jo->eps;
    timeit(1,1);
-
+m_pars->flops = m_pars->flops +4;
 }
 
 //**********************************************************************

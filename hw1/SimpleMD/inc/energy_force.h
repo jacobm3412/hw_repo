@@ -5,10 +5,10 @@
 #include "params.h"
 #include "atoms.h"
 
-void compute_long_range_correction(const lj_params *, const misc_params *,
+void compute_long_range_correction(const lj_params *,  misc_params *,
                                    float *, float * );
 
-void compute_energy_and_force( Atoms *, const lj_params *, const misc_params * );
+void compute_energy_and_force( Atoms *, const lj_params *, misc_params * );
 
 float minimum_image( const float, const float, const float );
 
