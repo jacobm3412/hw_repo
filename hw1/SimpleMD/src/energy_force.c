@@ -36,7 +36,7 @@ void compute_long_range_correction(const lj_params * len_jo, misc_params * m_par
 //       - m_pars: struct containing misc. parameters.
 //************************************************************************
 void compute_energy_and_force( Atoms * myatoms, const lj_params * len_jo, 
-                               const misc_params * m_pars )
+                                misc_params * m_pars )
 {
 
    timeit(1,0);
@@ -97,6 +97,8 @@ m_pars->flops = m_pars->flops +1;
    myatoms->virial *= 24.0 * len_jo->eps;
    timeit(1,1);
 m_pars->flops = m_pars->flops +4;
+
+printf("FLOPS %li\n",m_pars->flops);
 }
 
 //**********************************************************************
